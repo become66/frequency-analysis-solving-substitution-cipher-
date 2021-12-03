@@ -6,6 +6,7 @@
 #include <map>
 #include <algorithm>
 #include <unordered_set>
+#include <set>
 #include <cmath>
 
 #define ull unsigned long long
@@ -59,12 +60,12 @@ double getScore(string str, unordered_map<string, double> &Quadrigram){
     string quadrStr = "." + str.substr(0,3); //"." is dummy
     for(size_t i = 3; i < str.size(); ++i){
         getNewQuastr(quadrStr, str[i]);
-        unordered_map<string,double>::const_iterator ptr = Quadrigram.find (quadrStr);
-        if ( ptr == Quadrigram.end() ){ // not find
+        unordered_map<string,double>::const_iterator it = Quadrigram.find (quadrStr);
+        if ( it == Quadrigram.end() ){ // not find
             score += log10(0.01/4224127913); // 4224127913 is the total count of Quadrigram
         } 
         else{
-            score += ptr->second;
+            score += it->second;
         }
     }
     return score;
@@ -76,8 +77,9 @@ int main() {
     for(char c = 'A'; c <= 'Z'; c++){
         count[c] = 0;
     }
-    map<ull,char> rank;
+    set<pair<ull,char>> sortedOrder;
     string cypherText;
+    unordered_map<char, char> decryptDictionary;
     
 
     
@@ -101,22 +103,29 @@ int main() {
     }
     ifs.close();
     for(const auto &pair:count){
-        rank[pair.second] = pair.first;
-        cout<<pair.first<<": "<<pair.second<<"\n";
+        sortedOrder.insert(make_pair(pair.second, pair.first));
     }
-    string frequencyOrder;
-    for(const auto &pair:rank){
-        frequencyOrder.push_back(pair.second);
+    string frequencyOrderedString = "ZXQJKVBPYGFWMUCLDRHSNIOATE";
+    int i = 0;
+    for(auto &pair:sortedOrder){
+        // cout<<pair.first<<","<<pair.second<<"\n";
+        decryptDictionary[pair.second] = frequencyOrderedString[i];
+        ++i;
     }
-    reverse(frequencyOrder.begin(), frequencyOrder.end());
-    cout<<frequencyOrder<<"\n";
+
+    for(auto &pair: decryptDictionary){
+        cout<<pair.first<<","<<pair.second<<"\n";
+    }
+
+
+
 
     unordered_map<string, double> Quadrigram;
     Quadrigram = getQuadrigram();
     // for(auto& pair: Quadrigram){
     //     cout<<pair.first<<","<<pair.second<<"\n";
     // }
-    cout<<getScore("Theinstallationsaresiteresponsivetheprocessisacollaborationwiththeimmediatecommunitiesinlocalspacestheinstallationsconsistedoftwolayersofsoundaseriesofcompositionscreatedfromlullabiescontributedbyfathersfromtheimmediatecommunityandasetofmotionactivatedsoundstationsaudiencespresencepromptsmultitudesofstoriestounfoldaudiodocumentariescreatedinconversationwithfathersonfederalprobationinstallationsareanopencalltothecommunitythroughaparticipatorylocationbasedcontributoryaudioaugmentedrealityplatformthatcanbeexperiencedonlinethroughamapandinphysicalspaceorbywalkingtheneighborhoodsasanaugmentedaudioappthemapcreatesasonicrepresentationofmemorieslullabiesvisionsanddesirescocreatingnewcollectivesocialmemories", Quadrigram)<<"\n";
+    // cout<<getScore("Theinstallationsaresiteresponsivetheprocessisacollaborationwiththeimmediatecommunitiesinlocalspacestheinstallationsconsistedoftwolayersofsoundaseriesofcompositionscreatedfromlullabiescontributedbyfathersfromtheimmediatecommunityandasetofmotionactivatedsoundstationsaudiencespresencepromptsmultitudesofstoriestounfoldaudiodocumentariescreatedinconversationwithfathersonfederalprobationinstallationsareanopencalltothecommunitythroughaparticipatorylocationbasedcontributoryaudioaugmentedrealityplatformthatcanbeexperiencedonlinethroughamapandinphysicalspaceorbywalkingtheneighborhoodsasanaugmentedaudioappthemapcreatesasonicrepresentationofmemorieslullabiesvisionsanddesirescocreatingnewcollectivesocialmemories", Quadrigram)<<"\n";
 
 
     
