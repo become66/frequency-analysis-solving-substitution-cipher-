@@ -118,6 +118,14 @@ unordered_map<char, char> getDecryptDictionary(const string &sortedLetterString,
     return decryptDictionary;
 }
 
+string decrypt(const string &cypherText, const unordered_map<char, char> &decryptDictionary){
+    string plainText = cypherText;
+    for(size_t i = 0; i < plainText.size(); i++){
+        plainText[i] = decryptDictionary.at(cypherText[i]); // same effect with decryptDictionary[cypherText[i]] and can pass compile
+    }
+    return plainText;
+}
+
 void getNewMappedString(string &mappedString, int maxWidth){
     try {
         if (maxWidth < 1 || maxWidth > 26) {
@@ -160,10 +168,11 @@ int main() {
     decryptDictionary = getDecryptDictionary(sortedLetterString, mappedString);
     Quadrigram = getQuadrigram();
 
+    
 
-    for(auto &pair: decryptDictionary){
-        cout<<pair.first<<","<<pair.second<<"\n";
-    }
+
+
+
 
 
 
