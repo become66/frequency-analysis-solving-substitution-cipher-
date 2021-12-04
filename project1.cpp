@@ -156,17 +156,15 @@ int main() {
     for(char c = 'A'; c <= 'Z'; c++){
         countMap[c] = 0;
     }
-    string sortedLetterString;
-    string cypherText;
-    unordered_map<char, char> decryptDictionary;
-    unordered_map<string, double> Quadrigram;
-    string mappedString = "ZXQJKVBPYGFWMUCLDRHSNIOATE"; // use most common frequencyOrderedString as innitial mappedString
-    int preScore = 0, newScore = 0;
+    string cypherText = readCypherText(countMap);
+    string sortedLetterString = getsortedLetterString(countMap);
+    string  mappedString = "ZXQJKVBPYGFWMUCLDRHSNIOATE", mutatedString; // use most common frequencyOrderedString as innitial mappedString
+    unordered_map<char, char> decryptDictionary, mutateddecryptDictionary;
+    unordered_map<string, double> Quadrigram = getQuadrigram();
+    int highestScore = 0, mutatedScore = 0;
     
-    cypherText = readCypherText(countMap);
-    sortedLetterString = getsortedLetterString(countMap);
+     
     decryptDictionary = getDecryptDictionary(sortedLetterString, mappedString);
-    Quadrigram = getQuadrigram();
 
     
 
@@ -180,13 +178,13 @@ int main() {
     // for(auto& pair: Quadrigram){
     //     cout<<pair.first<<","<<pair.second<<"\n";
     // }
-    // cout<<getScore("Theinstallationsaresiteresponsivetheprocessisacollaborationwiththeimmediatecommunitiesinlocalspacestheinstallationsconsistedoftwolayersofsoundaseriesofcompositionscreatedfromlullabiescontributedbyfathersfromtheimmediatecommunityandasetofmotionactivatedsoundstationsaudiencespresencepromptsmultitudesofstoriestounfoldaudiodocumentariescreatedinconversationwithfathersonfederalprobationinstallationsareanopencalltothecommunitythroughaparticipatorylocationbasedcontributoryaudioaugmentedrealityplatformthatcanbeexperiencedonlinethroughamapandinphysicalspaceorbywalkingtheneighborhoodsasanaugmentedaudioappthemapcreatesasonicrepresentationofmemorieslullabiesvisionsanddesirescocreatingnewcollectivesocialmemories", Quadrigram)<<"\n";
+    cout<<getScore("Theinstallationsaresiteresponsivetheprocessisacollaborationwiththeimmediatecommunitiesinlocalspacestheinstallationsconsistedoftwolayersofsoundaseriesofcompositionscreatedfromlullabiescontributedbyfathersfromtheimmediatecommunityandasetofmotionactivatedsoundstationsaudiencespresencepromptsmultitudesofstoriestounfoldaudiodocumentariescreatedinconversationwithfathersonfederalprobationinstallationsareanopencalltothecommunitythroughaparticipatorylocationbasedcontributoryaudioaugmentedrealityplatformthatcanbeexperiencedonlinethroughamapandinphysicalspaceorbywalkingtheneighborhoodsasanaugmentedaudioappthemapcreatesasonicrepresentationofmemorieslullabiesvisionsanddesirescocreatingnewcollectivesocialmemories", Quadrigram)<<"\n";
 
-    // for(int i = 0; i < 1000; i++){
-    //     char A,B;
-    //     getExchangeCh(A,B,8);
-    //     cout<<A<<","<<B<<"\n";
-    // }
+    for(int i = 0; i < 1000; i++){
+        getNewMappedString(mappedString,6);
+        cout<<mappedString<<"\n";
+    }
+
 
     return 0;
 }
