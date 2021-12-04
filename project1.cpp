@@ -71,18 +71,8 @@ double getScore(string str, unordered_map<string, double> &Quadrigram){
     return score;
 }
 
-
-int main() {
-    map<char,ull> count;
-    for(char c = 'A'; c <= 'Z'; c++){
-        count[c] = 0;
-    }
-    set<pair<ull,char>> sortedOrder;
+string readCypherText(map<char,ull> &countMap){
     string cypherText;
-    unordered_map<char, char> decryptDictionary;
-    
-
-    
     std::ifstream ifs("test.txt", std::ios::in);
     if (!ifs.is_open()) {
         cout << "Failed to open file.\n";
@@ -93,18 +83,28 @@ int main() {
             c = ifs.get();
             if(c <= 'Z' && c >= 'A'){
                 cypherText.push_back((char)c);
-                count[(char)c]++;
+                countMap[(char)c]++;
             }
             else if(c <= 'z' && c >= 'a'){
                 cypherText.push_back((char)c-'a'+'A');
-                count[(char)(c-'a'+'A')]++;
+                countMap[(char)(c-'a'+'A')]++;
             }
         }
     }
     ifs.close();
-    for(const auto &pair:count){
+    return cypherText;
+}
+
+set<pair<ull,char>> getSortedOrder(map<char,ull> &countMap){
+    set<pair<ull,char>> sortedOrder;
+    for(const auto &pair:countMap){
         sortedOrder.insert(make_pair(pair.second, pair.first));
     }
+    return sortedOrder;
+}
+
+unordered_map<char, char> getDecryptDictionary(set<pair<ull,char>> &sortedOrder){
+    unordered_map<char, char> decryptDictionary;
     string frequencyOrderedString = "ZXQJKVBPYGFWMUCLDRHSNIOATE";
     int i = 0;
     for(auto &pair:sortedOrder){
@@ -112,16 +112,33 @@ int main() {
         decryptDictionary[pair.second] = frequencyOrderedString[i];
         ++i;
     }
+    return decryptDictionary;
+}
 
-    for(auto &pair: decryptDictionary){
-        cout<<pair.first<<","<<pair.second<<"\n";
+
+int main() {
+    map<char,ull> countMap;
+    for(char c = 'A'; c <= 'Z'; c++){
+        countMap[c] = 0;
     }
-
-
-
-
+    set<pair<ull,char>> sortedOrder;
+    string cypherText;
+    unordered_map<char, char> decryptDictionary;
     unordered_map<string, double> Quadrigram;
+    
+    cypherText = readCypherText(countMap);
+    sortedOrder = getSortedOrder(countMap);
+    decryptDictionary = getDecryptDictionary(sortedOrder);
     Quadrigram = getQuadrigram();
+
+
+    // for(auto &pair: decryptDictionary){
+    //     cout<<pair.first<<","<<pair.second<<"\n";
+    // }
+
+
+
+
     // for(auto& pair: Quadrigram){
     //     cout<<pair.first<<","<<pair.second<<"\n";
     // }
