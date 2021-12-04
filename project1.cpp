@@ -56,7 +56,7 @@ void getNewQuastr(string &pre, char nextC){
     pre.push_back(nextC);
 }
 
-double getScore(string str, unordered_map<string, double> &Quadrigram){
+double getScore(const string &str, unordered_map<string, double> &Quadrigram){
     double score = 0;
     string quadrStr = "." + str.substr(0,3); //"." is dummy
     for(size_t i = 3; i < str.size(); ++i){
@@ -96,21 +96,24 @@ string readCypherText(map<char,ull> &countMap){
     return cypherText;
 }
 
-set<pair<ull,char>> getSortedOrder(map<char,ull> &countMap){
+string getsortedLetterString(map<char,ull> &countMap){
+    string sortedLetterString;
+    sortedLetterString.reserve(26);
     set<pair<ull,char>> sortedOrder;
     for(const auto &pair:countMap){
         sortedOrder.insert(make_pair(pair.second, pair.first));
     }
-    return sortedOrder;
+    for(auto &pair:sortedOrder){
+        sortedLetterString.push_back(pair.second);
+    }
+    return sortedLetterString;
 }
 
-unordered_map<char, char> getDecryptDictionary(set<pair<ull,char>> &sortedOrder,const string &mappedString){
+unordered_map<char, char> getDecryptDictionary(const string &sortedLetterString,const string &mappedString){
+    cout<<sortedLetterString.size()<<","<< mappedString.size()<<"(should both be 26)\n";
     unordered_map<char, char> decryptDictionary;
-    int i = 0;
-    for(auto &pair:sortedOrder){
-        // cout<<pair.first<<","<<pair.second<<"\n";
-        decryptDictionary[pair.second] = mappedString[i];
-        ++i;
+    for(size_t i = 0; i < sortedLetterString.size(); ++i){
+        decryptDictionary[sortedLetterString[i]] = mappedString[i];
     }
     return decryptDictionary;
 }
@@ -145,7 +148,7 @@ int main() {
     for(char c = 'A'; c <= 'Z'; c++){
         countMap[c] = 0;
     }
-    set<pair<ull,char>> sortedOrder;
+    string sortedLetterString;
     string cypherText;
     unordered_map<char, char> decryptDictionary;
     unordered_map<string, double> Quadrigram;
@@ -153,8 +156,8 @@ int main() {
     int preScore = 0, newScore = 0;
     
     cypherText = readCypherText(countMap);
-    sortedOrder = getSortedOrder(countMap);
-    decryptDictionary = getDecryptDictionary(sortedOrder, mappedString);
+    sortedLetterString = getsortedLetterString(countMap);
+    decryptDictionary = getDecryptDictionary(sortedLetterString, mappedString);
     Quadrigram = getQuadrigram();
 
 
