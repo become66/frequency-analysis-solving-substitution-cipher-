@@ -8,6 +8,8 @@
 #include <unordered_set>
 #include <set>
 #include <cmath>
+#include <cstdlib> 
+#include <ctime>   
 
 #define ull unsigned long long
 
@@ -48,7 +50,6 @@ unordered_map<string, double> getQuadrigram(){
     ifs.close();
     return ret;
 }
-
 
 void getNewQuastr(string &pre, char nextC){
     pre = pre.substr(1,3);
@@ -103,20 +104,43 @@ set<pair<ull,char>> getSortedOrder(map<char,ull> &countMap){
     return sortedOrder;
 }
 
-unordered_map<char, char> getDecryptDictionary(set<pair<ull,char>> &sortedOrder){
+unordered_map<char, char> getDecryptDictionary(set<pair<ull,char>> &sortedOrder,const string &mappedString){
     unordered_map<char, char> decryptDictionary;
-    string frequencyOrderedString = "ZXQJKVBPYGFWMUCLDRHSNIOATE";
     int i = 0;
     for(auto &pair:sortedOrder){
         // cout<<pair.first<<","<<pair.second<<"\n";
-        decryptDictionary[pair.second] = frequencyOrderedString[i];
+        decryptDictionary[pair.second] = mappedString[i];
         ++i;
     }
     return decryptDictionary;
 }
 
+void getNewMappedString(string &mappedString, int maxWidth){
+    try {
+        if (maxWidth < 1 || maxWidth > 26) {
+            throw "maxWidth should > 0 && < 26!";
+        }
+    }
+    catch (const char* message) {
+        std::cout << message << std::endl;
+    }
+    //take maxWidth = 6 for example
+    int width, pos; 
+    if(maxWidth == 1){
+        width = 1; 
+    }
+    else{
+        width = rand()%(maxWidth-1) + 1; // width = 1~6
+    }
+
+    pos = rand()%(26 - width); // if width = 6 =>  pos = 0~19; if width = 1 => pos = 0~24
+    int firstIdx = pos, secondIdx = pos + width;
+    swap(mappedString[firstIdx], mappedString[secondIdx]);
+}
 
 int main() {
+    srand( time(NULL) );
+
     map<char,ull> countMap;
     for(char c = 'A'; c <= 'Z'; c++){
         countMap[c] = 0;
@@ -125,16 +149,18 @@ int main() {
     string cypherText;
     unordered_map<char, char> decryptDictionary;
     unordered_map<string, double> Quadrigram;
+    string mappedString = "ZXQJKVBPYGFWMUCLDRHSNIOATE"; // use most common frequencyOrderedString as innitial mappedString
+    int preScore = 0, newScore = 0;
     
     cypherText = readCypherText(countMap);
     sortedOrder = getSortedOrder(countMap);
-    decryptDictionary = getDecryptDictionary(sortedOrder);
+    decryptDictionary = getDecryptDictionary(sortedOrder, mappedString);
     Quadrigram = getQuadrigram();
 
 
-    // for(auto &pair: decryptDictionary){
-    //     cout<<pair.first<<","<<pair.second<<"\n";
-    // }
+    for(auto &pair: decryptDictionary){
+        cout<<pair.first<<","<<pair.second<<"\n";
+    }
 
 
 
@@ -144,8 +170,11 @@ int main() {
     // }
     // cout<<getScore("Theinstallationsaresiteresponsivetheprocessisacollaborationwiththeimmediatecommunitiesinlocalspacestheinstallationsconsistedoftwolayersofsoundaseriesofcompositionscreatedfromlullabiescontributedbyfathersfromtheimmediatecommunityandasetofmotionactivatedsoundstationsaudiencespresencepromptsmultitudesofstoriestounfoldaudiodocumentariescreatedinconversationwithfathersonfederalprobationinstallationsareanopencalltothecommunitythroughaparticipatorylocationbasedcontributoryaudioaugmentedrealityplatformthatcanbeexperiencedonlinethroughamapandinphysicalspaceorbywalkingtheneighborhoodsasanaugmentedaudioappthemapcreatesasonicrepresentationofmemorieslullabiesvisionsanddesirescocreatingnewcollectivesocialmemories", Quadrigram)<<"\n";
 
-
-    
+    // for(int i = 0; i < 1000; i++){
+    //     char A,B;
+    //     getExchangeCh(A,B,8);
+    //     cout<<A<<","<<B<<"\n";
+    // }
 
     return 0;
 }
