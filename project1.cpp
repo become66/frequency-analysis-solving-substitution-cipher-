@@ -1,10 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
 #include <unordered_map>
 #include <map>
-#include <algorithm>
 #include <unordered_set>
 #include <set>
 #include <cmath>
@@ -201,10 +199,18 @@ int main() {
         decrptionKeys.insert(getNearOptimalDecrytionKey(Quadrigram, sortedLetterString, cypherText));
     }
     // cout<<decrptionKeys.size()<<"\n";
+
     pair<double,pair<string, string>> bestDecrptionKey;
     bestDecrptionKey = *decrptionKeys.rbegin();
-    cout<<bestDecrptionKey.first<<": "<<bestDecrptionKey.second.first<<"\n";
-    cout<<bestDecrptionKey.second.second<<"\n";
+    cout<<"mappingDictionary:"<<"\n";
+    cout<<sortedLetterString<<"\n";
+    cout<<"           ||\n           \\/\n"; //arrow
+    cout<<bestDecrptionKey.second.first<<"\n\n"; // mappedString
+
+    for(char &c: bestDecrptionKey.second.second){ // convert to lower case
+        c = tolower(c);
+    }
+    cout<<"plainText: "<<bestDecrptionKey.second.second<<"\n"; // plainText
 
     return 0;
 }
