@@ -131,6 +131,7 @@ string getMutatedMappedString(const string &mappedString, int maxWidth){
     }
     catch (const char* message) {
         std::cout << message << std::endl;
+        exit(-1);
     }
     
     string mutatedMappedString = mappedString;
