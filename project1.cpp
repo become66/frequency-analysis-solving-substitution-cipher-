@@ -201,16 +201,21 @@ int main() {
     // cout<<decrptionKeys.size()<<"\n";
 
     pair<double,pair<string, string>> bestDecrptionKey;
-    bestDecrptionKey = *decrptionKeys.rbegin();
-    cout<<"mappingDictionary:"<<"\n";
-    cout<<sortedLetterString<<"\n";
-    cout<<"           ||\n           \\/\n"; //arrow
-    cout<<bestDecrptionKey.second.first<<"\n\n"; // mappedString
+    set<pair<double,pair<string, string>>>::reverse_iterator it = decrptionKeys.rbegin();
+    for(int i = 0; i < 3; ++i, ++it){
+        bestDecrptionKey = *it;
+        cout<<"No. "<<(i+1)<<" posible:\n\n";
+        cout<<"encryption mappingDictionary:"<<"\n";
+        cout<<sortedLetterString<<"\n";
+        cout<<"           ||\n           \\/\n"; //arrow
+        cout<<bestDecrptionKey.second.first<<"\n\n"; // mappedString
 
-    for(char &c: bestDecrptionKey.second.second){ // convert to lower case
-        c = tolower(c);
+        for(char &c: bestDecrptionKey.second.second){ // convert to lower case
+            c = tolower(c);
+        }
+        cout<<"plainText: "<<bestDecrptionKey.second.second<<"\n"; // plainText
+        cout<<"------------------------------------------------------------\n";
     }
-    cout<<"plainText: "<<bestDecrptionKey.second.second<<"\n"; // plainText
 
     return 0;
 }
